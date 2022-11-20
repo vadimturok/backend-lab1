@@ -1,25 +1,29 @@
 import { Injectable } from '@nestjs/common';
 import { CategoryDto } from './category.dto';
-
-const categories: CategoryDto[] = [
-  {
-    id: 1,
-    name: 'category1',
-  },
-  {
-    id: 2,
-    name: 'category2',
-  },
-];
+import { InjectRepository } from '@nestjs/typeorm';
+import { Category } from './category.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class CategoryService {
-  createCategory(categoryDto: CategoryDto): CategoryDto {
-    categories.push(categoryDto);
-    return categoryDto;
+  constructor(
+    @InjectRepository(Category)
+    private categoryRepository: Repository<Category>,
+  ) {}
+
+  async createCategory(categoryDto: CategoryDto) {
+    return await this.categoryRepository.save(categoryDto);
   }
 
-  getAll(): CategoryDto[] {
-    return categories;
+  async getAll() {
+    return await this.categoryRepository.find();
+  }
+
+  async getById(id: number) {
+    return await this.categoryRepository.findOne({
+      where: {
+        id: id,
+      },
+    });
   }
 }

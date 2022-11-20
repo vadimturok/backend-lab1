@@ -1,7 +1,12 @@
+import { IsNotEmpty } from 'class-validator';
+
 export class RecordDto {
-  id: number;
+  @IsNotEmpty()
   userId: number;
+
+  @IsNotEmpty()
   categoryId: number;
-  createdDate: string;
+
+  @IsNotEmpty()
   totalSum: number;
 }

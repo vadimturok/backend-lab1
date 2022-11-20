@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  ParseIntPipe,
+  Post,
+  Query,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { RecordService } from './record.service';
 import { RecordDto } from './record.dto';
 
@@ -6,20 +15,21 @@ import { RecordDto } from './record.dto';
 export class RecordController {
   constructor(private recordService: RecordService) {}
 
+  @UsePipes(ValidationPipe)
   @Post()
   create(@Body() recordDto: RecordDto) {
     return this.recordService.createRecord(recordDto);
   }
 
   @Get('user')
-  getByUserId(@Query('userId') userId) {
-    return this.recordService.getByUserId(+userId);
+  getByUserId(@Query('userId', ParseIntPipe) userId: number) {
+    return this.recordService.getByUserId(userId);
   }
 
   @Get('category')
   getByCategoryAndUserId(
-    @Query('userId') userId,
-    @Query('categoryId') categoryId,
+    @Query('userId', ParseIntPipe) userId,
+    @Query('categoryId', ParseIntPipe) categoryId,
   ) {
     return this.recordService.getByCategoryAndUserId(+categoryId, +userId);
   }

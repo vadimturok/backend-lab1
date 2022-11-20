@@ -3,6 +3,10 @@
 /node_modules
 /.idea
 
+# environment variables
+/.development.env
+/.production.env
+
 # Logs
 logs
 *.log

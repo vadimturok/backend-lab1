@@ -21,6 +21,7 @@ import { CurrencyModule } from './currency/currency.module';
       entities: [],
       synchronize: true,
       autoLoadEntities: true,
+      ssl: true,
     }),
     UserModule,
     CategoryModule,

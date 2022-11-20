@@ -4,6 +4,7 @@ import { CategoryModule } from './category/category.module';
 import { RecordModule } from './record/record.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CurrencyModule } from './currency/currency.module';
 
 @Module({
   imports: [
@@ -20,11 +21,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       entities: [],
       synchronize: true,
       autoLoadEntities: true,
-      logging: true,
     }),
     UserModule,
     CategoryModule,
     RecordModule,
+    CurrencyModule,
   ],
   controllers: [],
   providers: [],

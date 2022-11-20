@@ -5,6 +5,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserService } from '../user/user.service';
 import { CategoryService } from '../category/category.service';
+import { Currency } from '../currency/currency.entity';
+import { CurrencyService } from '../currency/currency.service';
 
 @Injectable()
 export class RecordService {
@@ -12,6 +14,7 @@ export class RecordService {
     @InjectRepository(Record) private recordRepository: Repository<Record>,
     private userService: UserService,
     private categoryService: CategoryService,
+    private currencyService: CurrencyService,
   ) {}
   async createRecord(recordDto: RecordDto) {
     const foundCategory = await this.categoryService.getById(
@@ -25,10 +28,20 @@ export class RecordService {
       );
     }
     const record = new Record();
+    if (recordDto.currencyId) {
+      const foundCurrency = await this.currencyService.getById(
+        recordDto.currencyId,
+      );
+      if (foundCurrency) {
+        record.currency = foundCurrency;
+      }
+    } else {
+      record.currency = foundUser.currency;
+    }
     record.createdDate = new Date();
     record.totalSum = recordDto.totalSum;
-    record.category = await this.categoryService.getById(recordDto.categoryId);
-    record.user = await this.userService.getById(recordDto.userId);
+    record.category = foundCategory;
+    record.user = foundUser;
     return await this.recordRepository.save(record);
   }
 
@@ -37,6 +50,7 @@ export class RecordService {
       relations: {
         user: true,
         category: true,
+        currency: true,
       },
       where: {
         user: { id: userId },
@@ -49,6 +63,7 @@ export class RecordService {
       relations: {
         user: true,
         category: true,
+        currency: true,
       },
       where: {
         user: { id: userId },

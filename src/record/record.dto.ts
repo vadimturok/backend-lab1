@@ -9,4 +9,6 @@ export class RecordDto {
 
   @IsNotEmpty()
   totalSum: number;
+
+  currencyId?: number;
 }

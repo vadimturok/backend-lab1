@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Currency } from './currency.entity';
 import { Repository } from 'typeorm';
@@ -12,6 +12,13 @@ export class CurrencyService {
   ) {}
 
   async createNew(currency: CurrencyDto) {
+    const isExists = await this.getByName(currency.name);
+    if (isExists) {
+      throw new HttpException(
+        'Currency already exists',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
     const newCurrency = new Currency();
     newCurrency.name = currency.name;
     return await this.currencyRepository.save(newCurrency);

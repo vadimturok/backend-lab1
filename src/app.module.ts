@@ -22,6 +22,11 @@ import { CurrencyModule } from './currency/currency.module';
       synchronize: true,
       autoLoadEntities: true,
       ssl: true,
+      extra: {
+        ssl: {
+          rejectUnauthorized: false,
+        },
+      },
     }),
     UserModule,
     CategoryModule,

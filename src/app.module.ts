@@ -21,12 +21,15 @@ import { CurrencyModule } from './currency/currency.module';
       entities: [],
       synchronize: true,
       autoLoadEntities: true,
-      ssl: true,
-      extra: {
-        ssl: {
-          rejectUnauthorized: false,
-        },
-      },
+      ssl: process.env.NODE_ENV === 'production',
+      extra:
+        process.env.NODE_ENV === 'production'
+          ? {
+              ssl: {
+                rejectUnauthorized: false,
+              },
+            }
+          : {},
     }),
     UserModule,
     CategoryModule,
